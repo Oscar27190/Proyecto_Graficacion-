@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proyecto Gráficación</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            background: #222;
+            font-family: Arial, sans-serif;
+        }
+        canvas { 
+            display: block; 
+            cursor: grab;
+        }
+        canvas:active {
+            cursor: grabbing;
+        }
+        #info {
+            position: absolute; 
+            top: 10px; 
+            left: 10px;
+            background: rgba(0,0,0,0.85); 
+            color: white;
+            padding: 15px; 
+            border-radius: 10px; 
+            max-width: 300px;
+            border: 2px solid #4CAF50;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .key {
+            display: inline-block;
+            background: #333;
+            padding: 4px 10px;
+            margin: 3px;
+            border-radius: 5px;
+            border: 1px solid #666;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        h3 {
+            color: #4CAF50;
+            margin-top: 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        #mouse-info {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body tabindex="0">
+    <div id="info">
+        <h3>🚗 Proyecto Gráficación</h3>
+        <p><strong>Vehículo 3D con:</strong></p>
+        <ul>
+            <li>✅ Texturas procedurales</li>
+            <li>✅ Sistema de 3 luces</li>
+            <li>✅ Sombras dinámicas</li>
+            <li>✅ Gravedad básica</li>
+            <li>✅ Físicas simples</li>
+            <li>✅ Controles WASD</li>
+            <li>✅ Cámara orbital</li>
+        </ul>
+        
+        <h4>🎮 Controles:</h4>
+        <p><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> : Mover vehículo</p>
+        <p><span class="key">ESPACIO</span> : Activar gravedad</p>
+        <p><span class="key">R</span> : Reiniciar posición</p>
+        <p><span class="key">CLICK IZQ + ARRASTRAR</span> : Rotar cámara</p>
+        <p><span class="key">RUEDA</span> : Zoom in/out</p>
+        <p><span class="key">CLICK DER + ARRASTRAR</span> : Panear cámara</p>
+        
+        <p id="status" style="color: #4CAF50; margin-top: 10px; font-weight: bold;">
+            ▶️ Haz click en la pantalla y usa el ratón
+        </p>
+    </div>
+    
+    <div id="mouse-info">
+        Ratón: Click + arrastrar para mover cámara
+    </div>
+
+    <!-- Three.js y OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- IMPORTANTE: OrbitControls desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    
+    <!-- Nuestro código -->
+    <script src="main.js"></script>
+    
+    <script>
+        console.log("Iniciando aplicación...");
+        
+        // Función para iniciar cuando todo esté cargado
+        function initializeApp() {
+            console.log("Three.js cargado:", typeof THREE !== 'undefined');
+            console.log("OrbitControls cargado:", typeof THREE.OrbitControls !== 'undefined');
+            console.log("init disponible:", typeof init === 'function');
+            
+            if (typeof THREE !== 'undefined' && typeof init === 'function') {
+                // Enfocar la página para capturar teclas
+                document.body.focus();
+                
+                // Cambiar mensaje de estado
+                document.getElementById('status').textContent = '✅ Aplicación funcionando';
+                document.getElementById('status').style.color = '#00ff00';
+                
+                // Iniciar la aplicación
+                try {
+                    init();
+                    console.log("✅ Aplicación iniciada correctamente");
+                    
+                    // Instrucciones para el ratón
+                    setTimeout(function() {
+                        alert("Controles del ratón:\n\n• Click izquierdo + arrastrar: Rotar cámara\n• Rueda: Zoom in/out\n• Click derecho + arrastrar: Mover cámara\n\nHaz click en Aceptar para comenzar.");
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error("Error al iniciar:", error);
+                    document.getElementById('status').textContent = '❌ Error: ' + error.message;
+                    document.getElementById('status').style.color = 'red';
+                }
+            } else {
+                document.getElementById('status').textContent = '❌ Error: Faltan dependencias';
+                document.getElementById('status').style.color = 'red';
+                console.error("Falta Three.js o init()");
+            }
+        }
+        
+        // Esperar a que la página cargue completamente
+        window.addEventListener('load', function() {
+            console.log("Página cargada completamente");
+            setTimeout(initializeApp, 100);
+        });
+        
+        // Enfocar la página cuando se haga click
+        document.addEventListener('click', function() {
+            document.body.focus();
+            console.log("Página enfocada para controles");
+        });
+        
+        // Debug de teclas
+        document.addEventListener('keydown', function(e) {
+            console.log("Tecla presionada:", e.key);
+        });
+    </script>
+</body>
+</html>
